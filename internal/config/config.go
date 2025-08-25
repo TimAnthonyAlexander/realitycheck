@@ -3,7 +3,10 @@ package config
 import (
 	"os"
 	"strconv"
+	"strings"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 // Config holds all application configuration
@@ -38,9 +41,12 @@ type Config struct {
 
 // Load reads configuration from environment variables with defaults
 func Load() *Config {
+	// Try to load .env file (ignore errors if it doesn't exist)
+	godotenv.Load()
+
 	return &Config{
 		HTTPAddr:            getEnv("HTTP_ADDR", ":8080"),
-		DatabaseDSN:         getEnv("DB_DSN", "postgres://localhost/realitycheck?sslmode=disable"),
+		DatabaseDSN:         expandEnv(getEnv("DB_DSN", "postgres://localhost/realitycheck?sslmode=disable")),
 		OpenAIAPIKey:        getEnv("OPENAI_API_KEY", ""),
 		OpenAIRPS:           getEnvInt("OPENAI_RPS", 2),
 		OpenAIBurst:         getEnvInt("OPENAI_BURST", 4),
@@ -86,4 +92,22 @@ func getEnvDuration(key string, defaultValue time.Duration) time.Duration {
 		}
 	}
 	return defaultValue
+}
+
+// expandEnv performs basic shell expansion on environment variable values
+func expandEnv(value string) string {
+	// Handle $(whoami) expansion
+	if strings.Contains(value, "$(whoami)") {
+		username := os.Getenv("USER")
+		if username == "" {
+			username = os.Getenv("USERNAME") // Windows fallback
+		}
+		if username == "" {
+			username = "postgres" // Default fallback
+		}
+		value = strings.ReplaceAll(value, "$(whoami)", username)
+	}
+
+	// Handle other common expansions as needed
+	return value
 }

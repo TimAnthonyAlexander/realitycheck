@@ -44,7 +44,8 @@ CREATE INDEX IF NOT EXISTS idx_evidence_retrieved_at ON evidence (retrieved_at);
 CREATE INDEX IF NOT EXISTS idx_analyses_created_at ON analyses (created_at);
 
 -- Create index for cache expiration cleanup
-CREATE INDEX IF NOT EXISTS idx_web_cache_expiry ON web_cache ((created_at + (ttl_seconds || ' seconds')::INTERVAL));
+-- Note: Using a simpler index on created_at since the complex expression isn't IMMUTABLE
+CREATE INDEX IF NOT EXISTS idx_web_cache_expiry ON web_cache (created_at, ttl_seconds);
 
 -- Create extension for better JSON operations if available
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

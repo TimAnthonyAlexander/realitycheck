@@ -16,10 +16,10 @@ import (
 
 // Cache provides multi-level caching with LRU + Postgres + singleflight
 type Cache struct {
-	lru    *lru.Cache[string, *CacheEntry]
-	db     *pgxpool.Pool
-	sf     singleflight.Group
-	ttl    time.Duration
+	lru *lru.Cache[string, *CacheEntry]
+	db  *pgxpool.Pool
+	sf  singleflight.Group
+	ttl time.Duration
 }
 
 // CacheEntry represents a cached item
@@ -65,14 +65,17 @@ func (c *Cache) Get(ctx context.Context, key string) (json.RawMessage, bool, err
 		return nil, false, nil
 	}
 
-	entry := result.(*CacheEntry)
+	entry, ok := result.(*CacheEntry)
+	if !ok || entry == nil {
+		return nil, false, nil
+	}
 	return entry.Data, true, nil
 }
 
 // Set stores data in both LRU and database
 func (c *Cache) Set(ctx context.Context, key string, data json.RawMessage) error {
 	hash := c.hashKey(key)
-	
+
 	entry := &CacheEntry{
 		Data:      data,
 		CreatedAt: time.Now(),
@@ -82,8 +85,11 @@ func (c *Cache) Set(ctx context.Context, key string, data json.RawMessage) error
 	// Store in LRU
 	c.lru.Add(hash, entry)
 
-	// Store in database
-	return c.setDB(ctx, hash, key, data)
+	// Store in database (only if database is available)
+	if c.db != nil {
+		return c.setDB(ctx, hash, key, data)
+	}
+	return nil
 }
 
 // get implements the actual cache retrieval logic
@@ -97,10 +103,16 @@ func (c *Cache) get(ctx context.Context, key, hash string) (*CacheEntry, error) 
 		c.lru.Remove(hash)
 	}
 
-	// Check database
-	entry, found, err := c.getDB(ctx, hash)
-	if err != nil {
-		return nil, fmt.Errorf("database lookup failed: %w", err)
+	// Check database (only if database is available)
+	var entry *CacheEntry
+	var found bool
+	var err error
+
+	if c.db != nil {
+		entry, found, err = c.getDB(ctx, hash)
+		if err != nil {
+			return nil, fmt.Errorf("database lookup failed: %w", err)
+		}
 	}
 
 	if found && !c.isExpired(entry) {
@@ -123,8 +135,8 @@ func (c *Cache) getDB(ctx context.Context, hash string) (*CacheEntry, bool, erro
 	var createdAt time.Time
 	var ttlSeconds int
 
-	err := c.db.QueryRow(ctx, 
-		"SELECT result, created_at, ttl_seconds FROM web_cache WHERE hash = $1", 
+	err := c.db.QueryRow(ctx,
+		"SELECT result, created_at, ttl_seconds FROM web_cache WHERE hash = $1",
 		hash,
 	).Scan(&result, &createdAt, &ttlSeconds)
 
