@@ -34,7 +34,7 @@ import {
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { apiService } from '../services/apiService';
-import { Analysis } from '../types/api';
+import { type Analysis } from '../types/api';
 import ScoreCard from '../components/ScoreCard';
 
 export default function AnalysisPage() {

@@ -29,7 +29,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { apiService } from '../services/apiService';
-import { Analysis, AnalysisListResponse } from '../types/api';
+import { type Analysis, type AnalysisListResponse } from '../types/api';
 
 export default function DashboardPage() {
     const [analyses, setAnalyses] = useState<Analysis[]>([]);
