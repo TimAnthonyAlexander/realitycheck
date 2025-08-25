@@ -79,7 +79,7 @@ func (hb *HTMLBuilder) Build(analysis types.Analysis) string {
 	for _, score := range scores {
 		report.WriteString("                <div class=\"score-item\">\n")
 		report.WriteString(fmt.Sprintf("                    <div class=\"score-name\">%s</div>\n", score.name))
-		report.WriteString(fmt.Sprintf("                    <div class=\"score-bar-container\">\n"))
+		report.WriteString("                    <div class=\"score-bar-container\">\n")
 		report.WriteString(fmt.Sprintf("                        <div class=\"score-bar %s\" style=\"width: %.1f%%\"></div>\n", hb.getScoreClass(score.value), score.value))
 		report.WriteString("                    </div>\n")
 		report.WriteString(fmt.Sprintf("                    <div class=\"score-value\">%.0f</div>\n", score.value))
