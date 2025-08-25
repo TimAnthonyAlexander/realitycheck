@@ -320,21 +320,23 @@ export default function AnalysisPage() {
                                                 {analysis.market.positioning}
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={12} md={6}>
-                                            <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
-                                                Competitors ({analysis.market.competitors.length})
-                                            </Typography>
-                                            {analysis.market.competitors.slice(0, 3).map((competitor, index) => (
-                                                <Box key={index} sx={{ mb: 1 }}>
-                                                    <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                                                        {competitor.name}
-                                                    </Typography>
-                                                    <Typography variant="caption" color="text.secondary">
-                                                        {competitor.description}
-                                                    </Typography>
-                                                </Box>
-                                            ))}
-                                        </Grid>
+                                        {analysis.market.competitors &&
+                                            <Grid item xs={12} md={6}>
+                                                <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
+                                                    Competitors ({analysis.market.competitors?.length})
+                                                </Typography>
+                                                {analysis.market.competitors.slice(0, 3).map((competitor, index) => (
+                                                    <Box key={index} sx={{ mb: 1 }}>
+                                                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                                            {competitor.name}
+                                                        </Typography>
+                                                        <Typography variant="caption" color="text.secondary">
+                                                            {competitor.description}
+                                                        </Typography>
+                                                    </Box>
+                                                ))}
+                                            </Grid>
+                                        }
                                     </Grid>
                                 </AccordionDetails>
                             </Accordion>
@@ -411,8 +413,7 @@ export default function AnalysisPage() {
                             </Accordion>
                         </Grid>
 
-                        {/* Risks */}
-                        {analysis.risks.risks.length > 0 && (
+                        {analysis.risks.risks && analysis.risks.risks.length > 0 && (
                             <Grid item xs={12}>
                                 <Accordion>
                                     <AccordionSummary expandIcon={<ExpandMore />}>
@@ -495,8 +496,7 @@ export default function AnalysisPage() {
                         )}
                     </Grid>
 
-                    {/* Evidence Summary */}
-                    {analysis.evidence.length > 0 && (
+                    {analysis.evidence && analysis.evidence.length > 0 && (
                         <Box sx={{ mt: 4 }}>
                             <Typography variant="h4" sx={{ mb: 2, fontWeight: 600 }}>
                                 Evidence Summary

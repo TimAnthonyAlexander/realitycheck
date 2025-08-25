@@ -44,7 +44,7 @@ func main() {
 
 	// Initialize components
 	llmClient := llm.NewClient(cfg.OpenAIAPIKey, cfg.OpenAIRPS, cfg.OpenAIBurst)
-	
+
 	evidenceCache, err := cache.NewEvidenceCache(db, cfg.CacheLRUSize, cfg.CacheTTL)
 	if err != nil {
 		log.Fatalf("Failed to initialize evidence cache: %v", err)
@@ -85,14 +85,14 @@ func main() {
 
 	// Apply middleware
 	var handler http.Handler = mux
-	handler = httpx.CORSMiddleware(handler)
-	handler = httpx.LoggingMiddleware(handler)
 	handler = httpx.AuthMiddleware(cfg.BearerToken)(handler)
+	handler = httpx.LoggingMiddleware(handler)
+	handler = httpx.CORSMiddleware(handler)
 
 	server := &http.Server{
 		Addr:    cfg.HTTPAddr,
 		Handler: handler,
-		
+
 		// Timeouts
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 120 * time.Second, // Long timeout for analysis requests

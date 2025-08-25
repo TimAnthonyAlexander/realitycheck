@@ -92,7 +92,7 @@ dev-setup: setup-db
 		echo "# RealityCheck Configuration" > .env; \
 		echo "OPENAI_API_KEY=your-openai-api-key" >> .env; \
 		echo "DB_DSN=postgres://localhost/realitycheck?sslmode=disable" >> .env; \
-		echo "HTTP_ADDR=:8080" >> .env; \
+		echo "HTTP_ADDR=:9444" >> .env; \
 		echo "LOG_LEVEL=debug" >> .env; \
 		echo ".env file created. Please update with your OpenAI API key."; \
 	else \
@@ -112,7 +112,7 @@ docker-build:
 
 docker-run: docker-build
 	@echo "Running RealityCheck in Docker..."
-	docker run -p 8080:8080 \
+	docker run -p 9444:9444 \
 		-e OPENAI_API_KEY=$(OPENAI_API_KEY) \
 		-e DB_DSN="host=host.docker.internal user=postgres dbname=realitycheck sslmode=disable" \
 		realitycheck:latest
@@ -126,11 +126,11 @@ example-loom:
 
 example-api-test:
 	@echo "Testing API with example request..."
-	@if ! curl -s http://localhost:8080/health >/dev/null; then \
+	@if ! curl -s http://localhost:9444/health >/dev/null; then \
 		echo "API server not running. Start with 'make run-api' first"; \
 		exit 1; \
 	fi
-	curl -X POST http://localhost:8080/v1/analyze \
+	curl -X POST http://localhost:9444/v1/analyze \
 		-H "Content-Type: application/json" \
 		-d '{"idea":{"title":"TestStartup","one_liner":"AI-powered test solution"}}'
 

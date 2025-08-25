@@ -45,7 +45,7 @@ func Load() *Config {
 	godotenv.Load()
 
 	return &Config{
-		HTTPAddr:            getEnv("HTTP_ADDR", ":8080"),
+		HTTPAddr:            getEnv("HTTP_ADDR", ":9444"),
 		DatabaseDSN:         expandEnv(getEnv("DB_DSN", "postgres://localhost/realitycheck?sslmode=disable")),
 		OpenAIAPIKey:        getEnv("OPENAI_API_KEY", ""),
 		OpenAIRPS:           getEnvInt("OPENAI_RPS", 2),

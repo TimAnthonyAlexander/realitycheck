@@ -54,7 +54,7 @@ The interface embraces **minimalism with strategic color bursts**, featuring:
    
    Edit `.env` to set your API URL:
    ```
-   VITE_API_URL=http://localhost:8080
+   VITE_API_URL=http://localhost:9444
    ```
 
 4. **Start development server:**

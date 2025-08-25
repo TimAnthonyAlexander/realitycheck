@@ -64,7 +64,7 @@ export OPENAI_API_KEY="your-openai-api-key"
 export DB_DSN="postgres://localhost/realitycheck?sslmode=disable"
 
 # Optional (with defaults)
-export HTTP_ADDR=":8080"
+export HTTP_ADDR=":9444"
 export OPENAI_RPS="2"
 export OPENAI_BURST="4"
 export CACHE_LRU_SIZE="4096"
@@ -89,7 +89,7 @@ go run cmd/api/main.go
 #### Analyze a Startup Idea
 
 ```bash
-curl -X POST http://localhost:8080/v1/analyze \
+curl -X POST http://localhost:9444/v1/analyze \
   -H "Content-Type: application/json" \
   -d '{
     "idea": {
@@ -117,23 +117,23 @@ Response:
 
 ```bash
 # JSON format
-curl http://localhost:8080/v1/analyses/abc123...
+curl http://localhost:9444/v1/analyses/abc123...
 
 # Markdown format
-curl http://localhost:8080/v1/analyses/abc123....md
+curl http://localhost:9444/v1/analyses/abc123....md
 
 # HTML format
-curl http://localhost:8080/v1/analyses/abc123....html
+curl http://localhost:9444/v1/analyses/abc123....html
 ```
 
 #### List Analyses
 
 ```bash
 # List all analyses
-curl http://localhost:8080/v1/analyses?limit=10&offset=0
+curl http://localhost:9444/v1/analyses?limit=10&offset=0
 
 # Search analyses
-curl http://localhost:8080/v1/analyses?q=AI&limit=5
+curl http://localhost:9444/v1/analyses?q=AI&limit=5
 ```
 
 ### CLI Tool
@@ -179,7 +179,7 @@ go run cmd/cli/main.go \
 If `BEARER_TOKEN` is configured, include it in requests:
 
 ```bash
-curl -H "Authorization: Bearer your-token" http://localhost:8080/v1/analyze
+curl -H "Authorization: Bearer your-token" http://localhost:9444/v1/analyze
 ```
 
 ## Analysis Framework
@@ -293,7 +293,7 @@ psql realitycheck < internal/schema/migrations.sql
 |----------|---------|-------------|
 | `OPENAI_API_KEY` | Required | OpenAI API key |
 | `DB_DSN` | `postgres://localhost/realitycheck?sslmode=disable` | PostgreSQL connection |
-| `HTTP_ADDR` | `:8080` | HTTP server address |
+| `HTTP_ADDR` | `:9444` | HTTP server address |
 | `OPENAI_RPS` | `2` | OpenAI requests per second |
 | `OPENAI_BURST` | `4` | OpenAI burst capacity |
 | `CACHE_LRU_SIZE` | `4096` | LRU cache size |
@@ -326,7 +326,7 @@ CMD ["./api"]
 The API provides health check endpoints:
 
 ```bash
-curl http://localhost:8080/health
+curl http://localhost:9444/health
 ```
 
 ## Limitations & Considerations

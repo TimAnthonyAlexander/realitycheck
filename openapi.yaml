@@ -15,7 +15,7 @@ info:
     name: MIT
 
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:9444
     description: Local development server
   - url: https://api.realitycheck.com
     description: Production server
