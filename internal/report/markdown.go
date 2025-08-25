@@ -3,7 +3,6 @@ package report
 import (
 	"fmt"
 	"strings"
-	"time"
 
 	"realitycheck/pkg/types"
 )
@@ -206,7 +205,7 @@ func (mb *MarkdownBuilder) formatEvidenceRefs(evidenceIDs []string) string {
 	}
 
 	refs := make([]string, len(evidenceIDs))
-	for i, id := range evidenceIDs {
+	for i := range evidenceIDs {
 		// For now, just use index+1. In a full implementation,
 		// we'd maintain a mapping from evidence ID to reference number
 		refs[i] = fmt.Sprintf("[%d]", i+1)

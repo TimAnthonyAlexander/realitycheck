@@ -37,7 +37,7 @@ func (hb *HTMLBuilder) Build(analysis types.Analysis) string {
 	report.WriteString("    <header class=\"header\">\n")
 	report.WriteString(fmt.Sprintf("        <h1>Reality Check: %s</h1>\n", html.EscapeString(analysis.Idea.Title)))
 	report.WriteString(fmt.Sprintf("        <p class=\"one-liner\">%s</p>\n", html.EscapeString(analysis.Idea.OneLiner)))
-	report.WriteString(fmt.Sprintf("        <p class=\"analysis-date\">Analysis Date: %s</p>\n", analysis.CreatedAt.Format("January 2, 2006")))
+	report.WriteString("        <p class=\"analysis-date\">Analysis Date: " + analysis.CreatedAt.Format("January 2, 2006") + "</p>\n")
 	if analysis.Partial {
 		report.WriteString("        <div class=\"warning\">⚠️ This analysis is partial due to timeout or processing limitations.</div>\n")
 	}

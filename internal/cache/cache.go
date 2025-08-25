@@ -229,6 +229,11 @@ type EvidenceCache struct {
 	cache *Cache
 }
 
+// StartCleanupWorker starts a background worker to clean expired entries
+func (ec *EvidenceCache) StartCleanupWorker(ctx context.Context, interval time.Duration) {
+	ec.cache.StartCleanupWorker(ctx, interval)
+}
+
 // NewEvidenceCache creates a cache specifically for evidence
 func NewEvidenceCache(db *pgxpool.Pool, lruSize int, ttl time.Duration) (*EvidenceCache, error) {
 	cache, err := NewCache(db, lruSize, ttl)
