@@ -168,6 +168,14 @@ type AnalysisOptions struct {
 	Timeout     *time.Duration  `json:"timeout,omitempty"`
 }
 
+// GetLocation returns the location or nil if not set
+func (ao *AnalysisOptions) GetLocation() *ApproxLocation {
+	if ao == nil {
+		return nil
+	}
+	return ao.Location
+}
+
 // AnalysisResponse represents the API response for analysis creation
 type AnalysisResponse struct {
 	AnalysisID string `json:"analysis_id"`
