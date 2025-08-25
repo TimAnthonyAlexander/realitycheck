@@ -217,7 +217,6 @@ func formatJSON(analysis types.Analysis) string {
 	}
 
 	// Use a simple JSON format for CLI output
-	import "encoding/json"
 	bytes, _ := json.MarshalIndent(simplified, "", "  ")
 	return string(bytes)
 }
